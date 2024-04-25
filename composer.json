@@ -10,6 +10,9 @@
             ]
         }
     },
+    "require": {
+        "restruct/dot-static": "@stable"
+    },
     "extra": {
         "_deact_bin-movetoroottoactivate": [
             "bin/wkhtmltopdf-amd64"

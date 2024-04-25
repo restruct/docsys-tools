@@ -1,6 +1,9 @@
 <?php
 
 # NOTE: To remove the quarantine attribute from executable files on OSX, run: xattr -d com.apple.quarantine /path/to/file
+use Composer\Autoload\ClassLoader;
+use Composer\InstalledVersions;
+
 $baseDir = __DIR__ . DIRECTORY_SEPARATOR;
 
 # Detect environment and OS version if not defined
@@ -18,9 +21,9 @@ if(DOCSYS_OS_NAME == 'macOS') { # OSX versions (local-DEV)
 
     ## SITE + FUSE dependencies
     define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-osx/wkhtmltopdf');
-    define('CPDF_PATH', $baseDir . 'bin/cpdf-latest/20201009-OSX-Intel/cpdf'); # license: 2.2-2017, latest = test version (using Intel on ARM with bridge)
-    define('PDFINFO_PATH', $baseDir . 'bin/xpdfbin-4.02-mac/bin64/pdfinfo');
-    define('XPDF_BIN_PATH', $baseDir . 'bin/xpdfbin-4.02-mac/bin64/');
+    define('CPDF_PATH', $baseDir . 'bin/cpdf-20201009-OSX-Intel/cpdf'); # license: 2.2-2017, latest = test version (using Intel on ARM with bridge)
+    define('PDFINFO_PATH', $baseDir . 'bin/xpdfbin-4.02-mac-bin64/pdfinfo');
+    define('XPDF_BIN_PATH', $baseDir . 'bin/xpdfbin-4.02-mac-bin64/');
 
     ## FUSE-only dependencies
     define('GRAPHVIZ_DOT_PATH', '/opt/homebrew/bin/dot');
@@ -35,16 +38,16 @@ if(DOCSYS_OS_NAME == 'macOS') { # OSX versions (local-DEV)
     ## SITE + FUSE dependencies
     //define('WKHTMLTOPDF_PATH', $baseDir.DIRECTORY_SEPARATOR.'/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'); // 0.12.4 Ubuntu16.04/LIVE (v36156.2is.nl)
     if(DOCSYS_OS_VERSION == 16) {
-        define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu16.04/bin/wkhtmltopdf'); // 0.12.6 Ubuntu16.04/LIVE (v36156.2is.nl)
+        define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu16.04/wkhtmltopdf'); // 0.12.6 Ubuntu16.04/LIVE (v36156.2is.nl)
     } else {
-        define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu20.04/bin/wkhtmltopdf'); // 0.12.6 Ubuntu20.04/TEST
+        define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu20.04/wkhtmltopdf'); // 0.12.6 Ubuntu20.04/TEST
     }
-    define('CPDF_PATH', $baseDir . 'bin/cpdf-latest/20201012-Linux-Intel-64bit/cpdf'); # Ubuntu16.04/LIVE (v36156.2is.nl)
-    define('PDFINFO_PATH', $baseDir . 'bin/xpdfbin-4.02-linux/bin64/pdfinfo'); # Ubuntu16.04/LIVE (v36156.2is.nl)
-    define('XPDF_BIN_PATH', $baseDir . 'bin/xpdfbin-4.02-linux/bin64/'); # Ubuntu16.04/LIVE (v36156.2is.nl)
+    define('CPDF_PATH', $baseDir . 'bin/cpdf-20201012-Linux-Intel-64bit/cpdf'); # Ubuntu16.04/LIVE (v36156.2is.nl)
+    define('PDFINFO_PATH', $baseDir . 'bin/xpdfbin-4.02-linux-bin64/pdfinfo'); # Ubuntu16.04/LIVE (v36156.2is.nl)
+    define('XPDF_BIN_PATH', $baseDir . 'bin/xpdfbin-4.02-linux-bin64/'); # Ubuntu16.04/LIVE (v36156.2is.nl)
 
     ## FUSE-only dependencies
-    define('GRAPHVIZ_DOT_PATH', $baseDir.'/vendor/restruct/dot-static/x64/dot_static');
+    define('GRAPHVIZ_DOT_PATH', realpath(InstalledVersions::getInstallPath('restruct/dot-static')).'/x64/dot_static');
     define('CONVERT_PATH', '/usr/bin/convert'); // Ubuntu16.04/LIVE (v36156.2is.nl)
     define('GS_PATH', '/usr/bin/gs'); // Ubuntu16.04/LIVE (v36156.2is.nl)
 

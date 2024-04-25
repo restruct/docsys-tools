@@ -3,7 +3,11 @@
     "description": "Portable set of FUSE/DocSys CLI tools",
     "type": "library",
     "autoload": {
-        "psr-4": { "DocSysTools\\": ["src/"] },
+        "psr-4": {
+            "DocSysTools\\": [
+                "src/"
+            ]
+        }
     },
     "extra": {
         "_deact_bin-movetoroottoactivate": [

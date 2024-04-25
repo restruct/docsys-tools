@@ -2,6 +2,7 @@
     "name": "restruct/docsys-tools",
     "description": "Portable set of FUSE/DocSys CLI tools",
     "type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "DocSysTools\\": [

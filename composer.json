@@ -4,11 +4,11 @@
     "type": "library",
     "autoload": {
         "psr-4": { "DocSysTools\\": ["src/"] },
-        "_deact_files": [ "bootstrap.php" ]
     },
     "extra": {
         "_deact_bin-movetoroottoactivate": [
             "bin/wkhtmltopdf-amd64"
-        ]
+        ],
+        "_deact_files-movetoautoloadtoactivate": [ "bootstrap.php" ]
     }
 }

@@ -37,7 +37,7 @@ if(DOCSYS_OS_NAME == 'macOS') { # OSX versions (local-DEV)
     if(DOCSYS_OS_VERSION == 16) {
         define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu16.04/bin/wkhtmltopdf'); // 0.12.6 Ubuntu16.04/LIVE (v36156.2is.nl)
     } else {
-        define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu20.04_deb/usr/local/bin/wkhtmltopdf'); // 0.12.6 Ubuntu20.04/TEST
+        define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu20.04/bin/wkhtmltopdf'); // 0.12.6 Ubuntu20.04/TEST
     }
     define('CPDF_PATH', $baseDir . 'bin/cpdf-latest/20201012-Linux-Intel-64bit/cpdf'); # Ubuntu16.04/LIVE (v36156.2is.nl)
     define('PDFINFO_PATH', $baseDir . 'bin/xpdfbin-4.02-linux/bin64/pdfinfo'); # Ubuntu16.04/LIVE (v36156.2is.nl)

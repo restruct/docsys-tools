@@ -1,0 +1,12 @@
+{
+    "name": "restruct/docsys-tools",
+    "description": "Portable set of FUSE/DocSys CLI tools",
+    "type": "library",
+    "autoload": {
+        "psr-4": { "DocSysTools\\": ["src/"] },
+        "_deact_files": [ "bootstrap.php" ]
+    },
+    "_deact_bin": [
+        "bin/wkhtmltopdf-amd64"
+    ]
+}

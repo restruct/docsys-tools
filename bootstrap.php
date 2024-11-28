@@ -35,13 +35,19 @@ if(DOCSYS_OS_NAME == 'macOS') { # OSX versions (local-DEV)
 
 } else { # Linux/Ubuntu versions (TEST/LIVE)
 
-    ## SITE + FUSE dependencies
-    //define('WKHTMLTOPDF_PATH', $baseDir.DIRECTORY_SEPARATOR.'/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'); // 0.12.4 Ubuntu16.04/LIVE (v36156.2is.nl)
-    if(DOCSYS_OS_VERSION == 16) {
-        define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu16.04/wkhtmltopdf'); // 0.12.6 Ubuntu16.04/LIVE (v36156.2is.nl)
+    // makes it work on ddev (Debian 12) with package installed https://robfauls.com/install-wkhtmltopdf-on-debian12/
+    if (trim(DOCSYS_OS_NAME) == 'Debian' && trim(DOCSYS_OS_VERSION) == '12') {
+        define('WKHTMLTOPDF_PATH', '/usr/local/bin/wkhtmltopdf');
     } else {
-        define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu20.04/wkhtmltopdf'); // 0.12.6 Ubuntu20.04/TEST
+        ## SITE + FUSE dependencies
+        //define('WKHTMLTOPDF_PATH', $baseDir.DIRECTORY_SEPARATOR.'/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'); // 0.12.4 Ubuntu16.04/LIVE (v36156.2is.nl)
+        if(DOCSYS_OS_VERSION == 16) {
+            define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu16.04/wkhtmltopdf'); // 0.12.6 Ubuntu16.04/LIVE (v36156.2is.nl)
+        } else {
+            define('WKHTMLTOPDF_PATH', $baseDir . 'bin/wkhtmltox-0.12.6-amd64-Ubuntu20.04/wkhtmltopdf'); // 0.12.6 Ubuntu20.04/TEST
+        }
     }
+
     define('CPDF_PATH', $baseDir . 'bin/cpdf-20201012-Linux-Intel-64bit/cpdf'); # Ubuntu16.04/LIVE (v36156.2is.nl)
     define('PDFINFO_PATH', $baseDir . 'bin/xpdfbin-4.02-linux-bin64/pdfinfo'); # Ubuntu16.04/LIVE (v36156.2is.nl)
     define('XPDF_BIN_PATH', $baseDir . 'bin/xpdfbin-4.02-linux-bin64/'); # Ubuntu16.04/LIVE (v36156.2is.nl)

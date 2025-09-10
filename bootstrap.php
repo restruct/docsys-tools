@@ -8,13 +8,10 @@ $baseDir = __DIR__ . DIRECTORY_SEPARATOR;
 
 # Detect environment and OS version if not defined
 if(!defined('DOCSYS_OS_NAME')) {
-//    $os_name = shell_exec('command -v lsb_release >/dev/null && lsb_release -is') ?: 'OSX';
-    define('DOCSYS_OS_NAME', shell_exec('command -v lsb_release >/dev/null && lsb_release -is') ?: shell_exec('command -v sw_vers >/dev/null && sw_vers --productName'));
-//    echo "defining DOCSYS_OS_NAME";
+    define('DOCSYS_OS_NAME', trim(shell_exec('command -v lsb_release >/dev/null && lsb_release -is') ?: shell_exec('command -v sw_vers >/dev/null && sw_vers --productName')));
 }
 if(!defined('DOCSYS_OS_VERSION') && DOCSYS_OS_NAME != 'macOS') { // distinquish Ubuntu 16.04 or 20/up
     define('DOCSYS_OS_VERSION', (int) shell_exec('command -v lsb_release >/dev/null && lsb_release -rs') ?: (int) shell_exec('command -v sw_vers >/dev/null && sw_vers --productVersion'));
-//    echo "defining DOCSYS_OS_VERSION";
 }
 
 if(DOCSYS_OS_NAME == 'macOS') { # OSX versions (local-DEV)

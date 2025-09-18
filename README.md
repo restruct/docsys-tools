@@ -7,11 +7,16 @@ Helper module for various binaries required for FUSE/DocSys:
 #### FUSE dependencies
 - pdfinfo (included)
 - pdftopng (included)
-- convert (Imagemagick)
+- convert (Image/GraphicsMagick)
 - gs (Ghostscript)
 - dot (Graphviz, installed as dependency)
 #### FUSETOOLS dependencies
 - soffice (CLI LibreOffice)
+
+## Update constants from version 0.* to 1.*
+- `DocSysTools\DocSysTools::init()` renamed to `init_paths()`
+- removed/replaced `XPDF_BIN_PATH` with `PDFTOPNG_PATH`
+- changed `GRAPHVIZ_DOT_PATH` to `DOT_PATH`
 
 ## Configuration
 No configuration necessary, to detect & define contants for the paths of above cli tools:
@@ -33,12 +38,7 @@ define('DOCSYS_OS_NAME', 'macOS'); # Ubuntu / Debian / macOS
 define('DOCSYS_OS_VERSION', 16); #  16 / 20
 ```
 
-## Update constants from version 0.* to 1.*
-- `DocSysTools\DocSysTools::init()` renamed to `init_paths()`
-- removed/replaced `XPDF_BIN_PATH` with `PDFTOPNG_PATH`
-- changed `GRAPHVIZ_DOT_PATH` to `DOT_PATH`
-
-### wkhtmltopdf with PATCHED QT required for predictable PDFs
+## Required: `wkhtmltopdf` with PATCHED QT (for predictable PDFs)
 In case of unexpected scaling issues (and/or other unpredictable behaviour such as random missing images etc) in generated PDFs, make sure you're using a wkhtmltopdf with **patched QT**:  
 ```shell
 wkhtmltopdf -V # should include "wkhtmltopdf [...] (with patched qt)"
@@ -48,9 +48,9 @@ Or in your php code (eg on dev/build task):
 DocSysTools::check_wkhtml_patched($errorOnNonPatchedQT=false); // true to throw an error on unpatched QT
 ```
 
-### Recommended: install wkhtmltopdf 0.12.6 (WITH PATCHED QT!)
+## Installation of non-included tools/binaries (`wkhtmltopdf`, `convert`, `gs` & `soffice`)
 
-#### wkhtmltopdf on Ubuntu/Debian
+### How to install `wkhtmltopdf` 0.12.6 (WITH PATCHED QT!) on Ubuntu/Debian
 ```shell
 # Remove 'normal' (non-patched QT version) if required
 sudo apt-get remove wkhtmltopdf 
@@ -82,11 +82,41 @@ sudo apt install ./libjpeg-turbo8_2.1.2-0ubuntu1_amd64.deb
 
 For other operating systems, see this [guide](https://chyshkala.com/blog/wkhtmltopdf-with-patched-qt-the-complete-developer-s-guide), in case of troubles you may find a solution [here](https://stackoverflow.com/questions/34479040/how-to-install-wkhtmltopdf-with-patched-qt) 
 
-
-### (Some) wkhtmltopdf fallbacks included in this module
+#### (Some) `wkhtmltopdf` fallbacks included in this module
 For environments where installing is not an option (eg shared hosting), fallbacks for Ubuntu 16 & 20 and OSX (Intel/rosetta) are included.
 Static builds were discontinued after 0.12.4 because of library version issues between systems so the included 0.12.6 versions may work if all required libs happen to be available on your system.
 
+### `convert` (ImageMagick/GraphicsMagick)
+A `convert` binary will already be installed on most systems, if not you may install either ImageMagick or its more actively maintained fork GraphicsMagick. Most convenient is probably to install the `compat` metapackage, "a compatibility package for Ubuntu that provides the ImageMagick-compatible command-line interface for the GraphicsMagick image processing suite, allowing you to replace ImageMagick with the more stable and performant GraphicsMagick without code changes":
+```shell
+apt-get install graphicsmagick-imagemagick-compat
+```
+
+### `gs` (Ghostscript)
+`gs` will probably already be installed, if not:
+```shell
+sudo apt-get install ghostscript
+```
+
+### `soffice` (LibreOffice headless)
+`soffice` is LibreOffice's command line tool. The full LibreOffice suite pulls in X11 and lots of other dependencies you don't want on a server (may take up 1.5GB). 
+
+Instead `libreoffice-core-nogui` could be installed along with specific `libreoffice-[tool]-nogui` packages you want to be able to convert (315MB, see individual package options below):
+```shell
+apt-get install libreoffice-core-nogui libreoffice-writer-nogui libreoffice-impress-nogui libreoffice-draw-nogui --no-install-recommends --no-install-suggests
+```
+
+For the full set of tools and broadest document type support, just install `libreoffice-nogui` (about 364MB, the `--no-*` flags exclude X11 and reduce the amount of other dependencies):
+```shell
+apt-get install libreoffice-nogui --no-install-recommends --no-install-suggests
+```
+This installs (nogui versions):
+ * libreoffice-writer: Word processor
+ * libreoffice-calc: Spreadsheet
+ * libreoffice-impress: Presentation
+ * libreoffice-draw: Drawing
+ * libreoffice-base: Database
+ * libreoffice-math: Equation editor
 
 ## DEV NOTES:
 

@@ -1,22 +1,12 @@
 {
     "name": "restruct/docsys-tools",
-    "description": "Portable set of FUSE/DocSys CLI tools",
+    "description": "Umbrella package: portable DocSys CLI tool wrappers + system tool paths (GS, convert, soffice)",
     "type": "library",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "DocSysTools\\": [
-                "src/"
-            ]
-        }
-    },
     "require": {
-        "restruct/dot-static": "@stable"
-    },
-    "extra": {
-        "_deact_bin-movetoroottoactivate": [
-            "bin/wkhtmltopdf-amd64"
-        ],
-        "_deact_files-movetoautoloadtoactivate": [ "bootstrap.php" ]
+        "restruct/cpdf-static": "^1.0",
+        "restruct/wkhtmltopdf-static": "^1.0",
+        "restruct/xpdf-static": "^1.0",
+        "restruct/dot-static": "^2.0"
     }
 }

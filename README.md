@@ -1,137 +1,56 @@
-# Portable set of FUSE/DocSys CLI tools
+# restruct/docsys-tools
 
-Helper module for various binaries required for FUSE/DocSys:
-#### DHUB + FUSE dependencies
-- wkhtmltopdf (with patched QT, 0.12.6 fallbacks for Ubuntu 16/20 & OSX included)
-- cpdf (included)
-#### FUSE dependencies
-- pdfinfo (included)
-- pdftopng (included)
-- convert (Image/GraphicsMagick)
-- gs (Ghostscript)
-- dot (Graphviz, installed as dependency)
-#### FUSETOOLS dependencies
-- soffice (CLI LibreOffice)
+Umbrella package that bundles all DocSys CLI tool wrappers and defines system tool paths.
 
-## Update constants from version 0.* to 1.*
-- `DocSysTools\DocSysTools::init()` renamed to `init_paths()`
-- removed/replaced `XPDF_BIN_PATH` with `PDFTOPNG_PATH`
-- changed `GRAPHVIZ_DOT_PATH` to `DOT_PATH`
+## Sub-packages (bundled tools)
 
-## Configuration
-No configuration necessary, to detect & define contants for the paths of above cli tools:
+| Package | Constant | Tool |
+|---------|----------|------|
+| `restruct/cpdf-static` | `CPDF_PATH` | Coherent PDF v2.8.1 (macOS + Linux, x64 + ARM) |
+| `restruct/wkhtmltopdf-static` | `WKHTMLTOPDF_PATH` | wkhtmltopdf 0.12.6 with patched Qt + Docker |
+| `restruct/xpdf-static` | `XPDF_BIN_DIR` | xpdf tools (pdftotext, pdfinfo, pdftopng, etc.) |
+| `restruct/dot-static` | `GRAPHVIZ_DOT_PATH` | Graphviz dot (static Linux binary + Homebrew) |
+
+Each sub-package has its own bootstrap and PHP wrapper classes.
+
+## System tool paths (this package)
+
+This package's `bootstrap.php` defines paths for tools that must be installed on the system:
+
+| Constant | Tool | Install |
+|----------|------|---------|
+| `GS_PATH` | Ghostscript | `apt install ghostscript` |
+| `CONVERT_PATH` | ImageMagick/GraphicsMagick | `apt install graphicsmagick-imagemagick-compat` |
+| `SOFFICE_PATH` | LibreOffice headless | `apt install libreoffice-nogui` |
+
+## Usage
+
+Each sub-package auto-initializes via its own bootstrap. To also define system tool paths:
+
 ```php
-DocSysTools\DocSysTools::init_paths();
+require_once 'vendor/restruct/docsys-tools/bootstrap.php';
 ```
 
-Set required systems (DHUB/FUSE/FUSETOOLS) to halt execution if a certain tool for a system cannot be found:
-```php
-DocSysTools\DocSysTools::init_paths(['DHUB', 'FUSE']);
+Or override via environment variables:
+
+```env
+GS_PATH=/usr/bin/gs
+CONVERT_PATH=/usr/bin/convert
+SOFFICE_PATH=/usr/bin/soffice
 ```
 
-To save running a few shell commands (to detect arch, OS + version), define these as constants:  
-```php
-define('DOCSYS_ARCH', 'arm64'); # arm64 / x86_64
-define('DOCSYS_OS_NAME', 'macOS'); # Ubuntu / Debian / macOS
+## Migration from v0.x
 
-# Only for Ubuntu and if no system-installed wkhtmltopdf:
-define('DOCSYS_OS_VERSION', 16); #  16 / 20
-```
+The monolithic `DocSysTools::init_paths()` / `DocSysTools::init()` API is removed.
+Each sub-package now handles its own binary resolution independently.
 
-## Required: `wkhtmltopdf` with PATCHED QT (for predictable PDFs)
-In case of unexpected scaling issues (and/or other unpredictable behaviour such as random missing images etc) in generated PDFs, make sure you're using a wkhtmltopdf with **patched QT**:  
-```shell
-wkhtmltopdf -V # should include "wkhtmltopdf [...] (with patched qt)"
-```
-Or in your php code (eg on dev/build task):
-```php
-DocSysTools::check_wkhtml_patched($errorOnNonPatchedQT=false); // true to throw an error on unpatched QT
-```
+Constant changes:
+- `XPDF_BIN_PATH` → `XPDF_BIN_DIR` (from restruct/xpdf-static)
+- `PDFINFO_PATH` → use `Restruct\Xpdf\Xpdf::getToolPath('pdfinfo')`
+- `PDFTOPNG_PATH` → use `Restruct\Xpdf\Xpdf::getToolPath('pdftopng')`
+- `GRAPHVIZ_DOT_PATH` → still `GRAPHVIZ_DOT_PATH` (from restruct/dot-static)
+- `DOT_PATH` → removed, use `GRAPHVIZ_DOT_PATH`
 
-## Installation of non-included tools/binaries (`wkhtmltopdf`, `convert`, `gs` & `soffice`)
+## System tool installation
 
-### How to install `wkhtmltopdf` 0.12.6 (WITH PATCHED QT!) on Ubuntu/Debian
-```shell
-# Remove 'normal' (non-patched QT version) if required
-sudo apt-get remove wkhtmltopdf 
-sudo apt autoremove
-
-# Download latest release (jammy/22.04 release also works for noble/24.04)
-wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.jammy_amd64.deb
-
-# Install dependencies
-sudo apt-get update
-sudo apt-get install -y libfontconfig1 libfreetype6 libx11-6 libxext6 libxrender1 xfonts-75dpi xfonts-base
-
-apt-get install libfontenc1 xfonts-75dpi xfonts-base xfonts-encodings xfonts-utils openssl build-essential libssl-dev libxrender-dev git-core libx11-dev libxext-dev libfontconfig1-dev libfreetype6-dev fontconfig -y
-
-# Install wkhtmltopdf
-sudo dpkg -i wkhtmltox_0.12.6.1-3.jammy_amd64.deb
-sudo apt-get install -f
-
-# Check that wkhtmltopdf with patched QT got installed
-wkhtmltopdf -V # should return "wkhtmltopdf 0.12.6.1 (with patched qt)"
-
-# In case dpkg throws errors you may need to run
-sudo apt --fix-broken install
-
-# On Debian 12, libjpeg-turbo8 may be missing;
-wget http://mirrors.kernel.org/ubuntu/pool/main/libj/libjpeg-turbo/libjpeg-turbo8_2.1.2-0ubuntu1_amd64.deb
-sudo apt install ./libjpeg-turbo8_2.1.2-0ubuntu1_amd64.deb
-```
-
-For other operating systems, see this [guide](https://chyshkala.com/blog/wkhtmltopdf-with-patched-qt-the-complete-developer-s-guide), in case of troubles you may find a solution [here](https://stackoverflow.com/questions/34479040/how-to-install-wkhtmltopdf-with-patched-qt) 
-
-#### (Some) `wkhtmltopdf` fallbacks included in this module
-For environments where installing is not an option (eg shared hosting), fallbacks for Ubuntu 16 & 20 and OSX (Intel/rosetta) are included.
-Static builds were discontinued after 0.12.4 because of library version issues between systems so the included 0.12.6 versions may work if all required libs happen to be available on your system.
-
-### `convert` (ImageMagick/GraphicsMagick)
-A `convert` binary will already be installed on most systems, if not you may install either ImageMagick or its more actively maintained fork GraphicsMagick. Most convenient is probably to install the `compat` metapackage, "a compatibility package for Ubuntu that provides the ImageMagick-compatible command-line interface for the GraphicsMagick image processing suite, allowing you to replace ImageMagick with the more stable and performant GraphicsMagick without code changes":
-```shell
-apt-get install graphicsmagick-imagemagick-compat
-```
-
-### `gs` (Ghostscript)
-`gs` will probably already be installed, if not:
-```shell
-sudo apt-get install ghostscript
-```
-
-### `soffice` (LibreOffice headless)
-`soffice` is LibreOffice's command line tool. The full LibreOffice suite pulls in X11 and lots of other dependencies you don't want on a server (may take up 1.5GB). 
-
-Instead `libreoffice-core-nogui` could be installed along with specific `libreoffice-[tool]-nogui` packages you want to be able to convert (315MB, see individual package options below):
-```shell
-apt-get install libreoffice-core-nogui libreoffice-writer-nogui libreoffice-impress-nogui libreoffice-draw-nogui --no-install-recommends --no-install-suggests
-```
-
-For the full set of tools and broadest document type support, just install `libreoffice-nogui` (about 364MB, the `--no-*` flags exclude X11 and reduce the amount of other dependencies):
-```shell
-apt-get install libreoffice-nogui --no-install-recommends --no-install-suggests
-```
-This installs (nogui versions):
- * libreoffice-writer: Word processor
- * libreoffice-calc: Spreadsheet
- * libreoffice-impress: Presentation
- * libreoffice-draw: Drawing
- * libreoffice-base: Database
- * libreoffice-math: Equation editor
-
-## DEV NOTES:
-
-### (Legacy) wkhtmltopdf static build (0.12.4)
-0.12.4 can still just be downloaded and works (up untill Ubuntu 16.04, statically linked generic version); https://github.com/wkhtmltopdf/wkhtmltopdf/releases/0.12.4/
-
-#### .deb extraction
-  (https://www.cyberciti.biz/faq/how-to-extract-a-deb-file-without-opening-it-on-debian-or-ubuntu-linux/)  
-  unzipped & unzipped data.tar.xz, copied usr/local dir to docsys-tools/wkhtmltopdf-amd64-0.12.6-UbuntuXX.YY
-
-### Wkhtmltopdf (dynamically linked)
-0.12.6 amd64 .deb for Ubuntu 16.04 and 20.04 works IF ALL requirements happen to be installed (download and extract from .deb, dynamically linked); https://wkhtmltopdf.org/downloads.html
-
-### (OSX) make (wkhtmltopdf) binaries executable  
-`chmod +x /path/to/file`
-
-### (OSX) *“wkhtmltopdf” cannot be opened because the developer cannot be verified.*  
-To remove the quarantine attribute from executable files on OSX: `xattr -d com.apple.quarantine /path/to/file`
+See [previous README](https://github.com/restruct/docsys-tools/blob/f0db0eb/README.md) for detailed installation instructions for wkhtmltopdf, convert, gs, and soffice.

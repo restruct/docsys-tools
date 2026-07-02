@@ -9,7 +9,7 @@ Umbrella package that bundles all DocSys CLI tool wrappers and defines system to
 | `restruct/xpdf-static` | `XPDF_BIN_DIR` | xpdf tools (pdftotext, pdfinfo, pdftopng, etc.) | required (Packagist) |
 | `restruct/dot-static` | `GRAPHVIZ_DOT_PATH` | Graphviz dot (static Linux binary + Homebrew) | required (Packagist) |
 | `restruct/cpdf-static` | `CPDF_PATH` | Coherent PDF v2.8.1 (macOS + Linux, x64 + ARM) | **suggested** — AGPL/commercial license, private repo only |
-| `restruct/wkhtmltopdf-static` | `WKHTMLTOPDF_PATH` | wkhtmltopdf 0.12.6 with patched Qt + Docker | **suggested** — public GitHub repo (vcs), not on Packagist |
+| `restruct/wkhtmltopdf-static` | `WKHTMLTOPDF_PATH` | wkhtmltopdf 0.12.6 with patched Qt + Docker | **suggested** — on Packagist (kept optional: not every consumer needs it) |
 
 Each sub-package has its own bootstrap and PHP wrapper classes. The suggested
 packages must be required directly by the consuming project (with the

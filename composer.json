@@ -4,9 +4,11 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "restruct/cpdf-static": "^1.0",
-        "restruct/wkhtmltopdf-static": "^1.0",
         "restruct/xpdf-static": "^1.0",
         "restruct/dot-static": "^2.0"
+    },
+    "suggest": {
+        "restruct/cpdf-static": "Coherent PDF wrappers (CPDF_PATH) — AGPL/commercially licensed, distributed via private repository only",
+        "restruct/wkhtmltopdf-static": "wkhtmltopdf 0.12.6 patched-Qt wrappers (WKHTMLTOPDF_PATH) — public GitHub repo, add as vcs repository"
     }
 }

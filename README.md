@@ -1,6 +1,19 @@
 # restruct/docsys-tools
 
+*Maintained by [Restruct](https://github.com/restruct). If this package saves you time, you can
+[support ongoing maintenance](https://github.com/sponsors/restruct).*
+
 Umbrella package that bundles all DocSys CLI tool wrappers and defines system tool paths.
+
+## Requirements
+
+- PHP 8.2 or higher in practice. This package's own `bootstrap.php` needs PHP 8.0 (`composer.json`
+  says `>=8.0`), but `restruct/dot-static` ^2.0 requires PHP 8.2 and `restruct/xpdf-static` ^1.0
+  requires PHP 8.1.
+- The system tools below (Ghostscript, ImageMagick/GraphicsMagick, LibreOffice) if you use their
+  constants; they are not bundled.
+
+`composer.json` is the source of truth for version constraints.
 
 ## Sub-packages (bundled tools)
 
@@ -57,3 +70,10 @@ Constant changes:
 ## System tool installation
 
 See [previous README](https://github.com/restruct/docsys-tools/blob/f0db0eb/README.md) for detailed installation instructions for wkhtmltopdf, convert, gs, and soffice.
+
+## License
+
+This package (`bootstrap.php`, docs) is MIT licensed, see [LICENSE](LICENSE). The sub-packages it
+requires or suggests carry their own licences, including those of the third-party binaries they
+bundle: see each package's README (xpdf tools: GPL v2 or v3; Graphviz: Eclipse Public License;
+wkhtmltopdf: LGPL-3.0; Coherent PDF: AGPL or commercial).

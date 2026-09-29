@@ -1,16 +1,23 @@
 {
     "name": "restruct/docsys-tools",
-    "description": "Umbrella package: portable DocSys CLI tool wrappers + system tool paths (GS, convert, soffice)",
+    "description": "DocSys CLI tool paths. 1.x: compatibility line for the 1.0.0 DocSysTools API, delegating to the static-binary sub-packages",
     "type": "library",
     "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "DocSysTools\\": [
+                "src/"
+            ]
+        }
+    },
     "require": {
         "php": ">=8.0",
         "restruct/xpdf-static": "^1.0",
-        "restruct/dot-static": "^2.0"
+        "restruct/dot-static": "^2.0",
+        "restruct/wkhtmltopdf-static": "^1.0"
     },
     "suggest": {
-        "restruct/cpdf-static": "Coherent PDF wrappers (CPDF_PATH) — AGPL/commercially licensed, distributed via private repository only",
-        "restruct/wkhtmltopdf-static": "wkhtmltopdf 0.12.6 patched-Qt wrappers (WKHTMLTOPDF_PATH) — available on Packagist"
+        "restruct/cpdf-static": "Coherent PDF wrappers (CPDF_PATH), AGPL/commercially licensed, private repository only. Without it DocSysTools::init_paths() falls back to an OS-installed cpdf"
     },
     "funding": [
         {

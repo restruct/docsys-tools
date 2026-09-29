@@ -5,6 +5,16 @@
 
 Umbrella package that bundles all DocSys CLI tool wrappers and defines system tool paths.
 
+## Versions
+
+| Version | Branch | Status | What it is |
+|---------|--------|--------|------------|
+| 2.x | `main` | current | Umbrella only. No `DocSysTools` class: use each sub-package's own resolver |
+| 1.x | `v1` | compatibility, maintenance only | 1.0.4+ keeps the 1.0.0 `DocSysTools::init_paths()` API (deprecated), delegating to the sub-packages |
+
+1.0.1 to 1.0.3 removed the 1.0.0 API in patch releases by accident; 1.0.4 restores it. Moving from
+1.x to 2.x: see [UPGRADING.md](UPGRADING.md). History: [CHANGELOG.md](CHANGELOG.md).
+
 ## Requirements
 
 - PHP 8.2 or higher in practice. This package's own `bootstrap.php` needs PHP 8.0 (`composer.json`
@@ -41,7 +51,9 @@ This package's `bootstrap.php` defines paths for tools that must be installed on
 
 ## Usage
 
-Each sub-package auto-initializes via its own bootstrap. To also define system tool paths:
+Each sub-package resolves its binary on first use of its PHP class (for example
+`Restruct\WkhtmltoPdf\WkhtmltoPdfStatic::getPath()` or `::init()`), which includes its own
+bootstrap; nothing is defined on install. To also define system tool paths:
 
 ```php
 require_once 'vendor/restruct/docsys-tools/bootstrap.php';
@@ -59,6 +71,7 @@ SOFFICE_PATH=/usr/bin/soffice
 
 The monolithic `DocSysTools::init_paths()` / `DocSysTools::init()` API is removed.
 Each sub-package now handles its own binary resolution independently.
+Coming from 1.x: see [UPGRADING.md](UPGRADING.md) for the full mapping and a before/after example.
 
 Constant changes:
 - `XPDF_BIN_PATH` → `XPDF_BIN_DIR` (from restruct/xpdf-static)

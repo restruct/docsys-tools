@@ -3,6 +3,13 @@
     "description": "Umbrella package: portable DocSys CLI tool wrappers + system tool paths (GS, convert, soffice)",
     "type": "library",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Restruct",
+            "email": "dev@restruct.nl",
+            "homepage": "https://restruct.nl"
+        }
+    ],
     "require": {
         "php": ">=8.0",
         "restruct/xpdf-static": "^1.0",

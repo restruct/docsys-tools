@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Read-only token: the jobs only check out and run tests
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # composer.json says >=8.0, but restruct/dot-static ^2.0 needs 8.2, so 8.2 is the lowest
+        # PHP the package installs on (README "Requirements"). Floor and ceiling of that range;
+        # they also cover both PHPUnit majors require-dev allows: 8.2 resolves 11.5, 8.5 resolves 12.x.
+        php: ['8.2', '8.5']
+
+    steps:
+      # Actions pinned to a commit SHA (tag in the trailing comment): a moved tag cannot change
+      # what runs here
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        # No composer.lock is committed (it is a library), so this resolves fresh per PHP version.
+        run: composer install --no-interaction --no-progress
+
+      - name: Run tests
+        # --fail-on-skipped: SubPackagesTest skips off Linux, which is right on a developer's Mac
+        # but on this runner it must run, so a skip is a failure.
+        # --fail-on-empty-test-suite: a run that discovers no tests exits non-zero instead of 0.
+        run: vendor/bin/phpunit --fail-on-skipped --fail-on-empty-test-suite
+
+  lint:
+    name: Lint PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # bootstrap.php on its own claims PHP 8.0 (it uses match), so lint from there up
+        php: ['8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: Syntax check bootstrap.php
+        # tests/ is not linted on 8.0/8.1: it uses PHPUnit attributes and only runs on 8.2+
+        run: php -l bootstrap.php
+      - name: Syntax check the test suite
+        if: ${{ matrix.php >= '8.2' }}
+        run: find tests -name '*.php' -print0 | xargs -0 -n1 php -l

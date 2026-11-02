@@ -1,0 +1,6 @@
+# Test suite, CI and dev config stay out of dist installs (Packagist zips)
+/tests             export-ignore
+/.github           export-ignore
+/phpunit.xml.dist  export-ignore
+/.gitignore        export-ignore
+/.gitattributes    export-ignore

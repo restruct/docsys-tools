@@ -25,8 +25,8 @@
         }
     },
     "suggest": {
-        "restruct/cpdf-static": "Coherent PDF wrappers (CPDF_PATH) — AGPL/commercially licensed, distributed via private repository only",
-        "restruct/wkhtmltopdf-static": "wkhtmltopdf 0.12.6 patched-Qt wrappers (WKHTMLTOPDF_PATH) — available on Packagist"
+        "restruct/cpdf-static": "Coherent PDF wrappers (CPDF_PATH): AGPL/commercially licensed, distributed via private repository only",
+        "restruct/wkhtmltopdf-static": "wkhtmltopdf 0.12.6 patched-Qt wrappers (WKHTMLTOPDF_PATH), available on Packagist"
     },
     "funding": [
         {

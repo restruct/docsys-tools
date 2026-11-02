@@ -1,6 +1,7 @@
 {
     "name": "restruct/docsys-tools",
-    "description": "Umbrella package: portable DocSys CLI tool wrappers + system tool paths (GS, convert, soffice)",
+    "description": "Umbrella package for PHP document tooling: bundled xpdf tools and Graphviz dot, optional wkhtmltopdf and cpdf, plus Ghostscript, ImageMagick and LibreOffice path detection",
+    "keywords": ["php", "pdf", "xpdf", "graphviz", "wkhtmltopdf", "ghostscript", "imagemagick", "libreoffice", "document-generation"],
     "type": "library",
     "license": "MIT",
     "authors": [

@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0.0 (unreleased)
+## 2.0.0 (2026-09-29)
 
 The umbrella layout that 1.0.1 to 1.0.3 shipped by accident, now released as the major version it
 is. No code changes compared to 1.0.3.

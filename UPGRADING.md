@@ -106,7 +106,7 @@ Or, if code elsewhere reads the constants, initialise the sub-packages instead:
 | `DOT_PATH` | `DotStatic::getPath()`, or `GRAPHVIZ_DOT_PATH` after `DotStatic::init()` | `restruct/dot-static` |
 | `GS_PATH`, `CONVERT_PATH`, `SOFFICE_PATH` | same constants, after `require_once 'vendor/restruct/docsys-tools/bootstrap.php'` | `restruct/docsys-tools` |
 | `DocSysTools::check_wkhtml_patched()` | `str_contains(WkhtmltoPdfStatic::version(), 'with patched qt')` | `restruct/wkhtmltopdf-static` |
-| `init_paths(['DHUB', 'FUSE'])` errors | check `Cpdf::isAvailable()`, `WkhtmltoPdfStatic::isAvailable()`, `Xpdf::isAvailable()`, `DotStatic::isAvailable()` yourself | each package |
+| `init_paths($requiredSystems)` errors when a tool a listed system needs is missing | check `Cpdf::isAvailable()`, `WkhtmltoPdfStatic::isAvailable()`, `Xpdf::isAvailable()`, `DotStatic::isAvailable()` yourself | each package |
 | `DOCSYS_ARCH`, `DOCSYS_OS_NAME`, `DOCSYS_OS_VERSION` | not needed: the sub-packages detect OS and architecture | - |
 
 Class namespaces: `Restruct\Cpdf\Cpdf`, `Restruct\WkhtmltoPdf\WkhtmltoPdfStatic`,
